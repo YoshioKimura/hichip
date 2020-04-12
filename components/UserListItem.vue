@@ -1,13 +1,16 @@
 <template>
-  <v-list-item>
-    <v-list-item-avatar size="80">
-      <v-img :src="user.img" />
-    </v-list-item-avatar>
-    <v-list-item-content>
-      <v-list-item-subtitle v-text="user.name" />
-      <button @click="sendTip">チップを贈る</button>
-    </v-list-item-content>
-  </v-list-item>
+  <v-card
+    @click="sendTip"
+    width="150"
+    class="d-flex flex-wrap ma-4"
+  >
+    <v-img :src="user.img" />
+    <v-card-text>
+      <div class="font-weight-black">
+        {{ user.name }}
+      </div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

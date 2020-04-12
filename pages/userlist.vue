@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-list>
+    <v-layout justify-start>
       <template v-for="(user, i) in users">
         <UserListItem
           :user="user"
@@ -8,7 +8,7 @@
           @openDialog="openDialog"
         />
       </template>
-    </v-list>
+    </v-layout>
     <SendTipDialog
       :dialog="dialog"
       :user="user"
@@ -39,12 +39,12 @@ export default {
         {
           id: 54,
           name: '山下智久',
-          img: 'https://i.pravatar.cc/80?img=1'
+          img: 'https://i.pravatar.cc/150?img=1'
         },
         {
           id: 2,
           name: '三浦春馬',
-          img: 'https://i.pravatar.cc/80?img=2'
+          img: 'https://i.pravatar.cc/150?img=2'
         }
       ]
     }
