@@ -5,7 +5,7 @@
       color="white"
     >
       <v-spacer />
-      <v-btn rounded outlined color="pink">
+      <v-btn rounded outlined color="pink" to="/userlist">
         チップをおくる
       </v-btn>
       <v-menu
