@@ -1,5 +1,14 @@
 <template>
   <v-container>
+    <v-tabs>
+      <v-tab
+        v-for="(tab, i) in tabs"
+        :key="i"
+        @click="click(tab.type)"
+      >
+        {{ tab.label }}
+      </v-tab>
+    </v-tabs>
     <template v-for="(itme, i) in itmes">
       <TimeLineItem
         :item="itme"
@@ -17,6 +26,16 @@ export default {
   layout: 'user',
   components: {
     TimeLineItem
+  },
+  data () {
+    return {
+      tabs: [
+        { label: 'すべて', type: 'all' },
+        { label: 'もらった', type: 'take' },
+        { label: 'おくった', type: 'give' },
+        { label: 'いいねした', type: 'like' }
+      ]
+    }
   },
   computed: {
     itmes () {
@@ -52,6 +71,11 @@ export default {
           comment: 'ピアボーナスサービス'
         }
       ]
+    }
+  },
+  methods: {
+    click (type) {
+      alert(type)
     }
   }
 }
