@@ -46,13 +46,20 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/markdownit'
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+  },
+  /**
+   * markdownit module configuration
+   * see https://github.com/nuxt-community/modules
+   */
+  markdownit: {
   },
   /*
   ** vuetify module configuration
