@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     sendTip () {
-      alert(this.user.id)
+      this.$emit('openDialog', this.user)
     }
   }
 }
