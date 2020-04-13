@@ -47,6 +47,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/markdownit'
   ],
   /*
@@ -86,6 +87,29 @@ export default {
   moment: {
     defaultLocale: 'ja',
     locales: ['ja']
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/api/login',
+            method: 'POST',
+            propertyName: 'access_token'
+          },
+          logout: {
+            url: '/api/logout',
+            method: 'POST'
+          },
+          user: {
+            url: '/api/me',
+            method: 'POST',
+            propertyName: false
+          }
+        }
+      }
+    }
   },
 
   /*
