@@ -60,11 +60,18 @@ export default {
     }
   },
   methods: {
-    signIn () {
-      this.$store.dispatch('login/login', {
-        email: this.email,
-        password: this.password
-      })
+    async signIn () {
+      try {
+        await this.$auth.loginWith('local', {
+          data: {
+            email: this.email,
+            password: this.password
+          }
+        })
+        this.$router.push('/timeline')
+      } catch (e) {
+        alert('[Error]' + e)
+      }
     }
   }
 }
