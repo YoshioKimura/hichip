@@ -48,6 +48,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
+    '@nuxtjs/proxy',
     '@nuxtjs/markdownit'
   ],
   /*
@@ -55,7 +56,12 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'http://127.0.0.1:8000' // TODO: Laravelホストに変更
+    proxy: true
+  },
+  proxy: {
+    '/api/': {
+      target: 'http://127.0.0.1:8000' // TODO: Laravelサーバに置換
+    }
   },
   /**
    * markdownit module configuration
