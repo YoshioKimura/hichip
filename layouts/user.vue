@@ -84,9 +84,24 @@
             <v-list-item-title>{{ link.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item
+          :to="`/${user.uid}`"
+          nuxt
+        >
+          <v-list-item-content>
+            <v-list-item-title>マイページ</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          to="/prologue"
+          nuxt
+        >
+          <v-list-item-content>
+            <v-list-item-title>プロローグ</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
     <v-content>
       <nuxt />
     </v-content>
@@ -98,14 +113,20 @@ export default {
   data () {
     return {
       links: [
-        { title: 'タイムライン', to: '/timeline' },
-        { title: 'マイページ', to: '/profile_received' },
-        { title: 'プロローグ', to: '/prologue' }
+        { title: 'タイムライン', to: '/' }
       ],
       menus: [
         { title: 'チップを送る', to: '/userlist' },
         { title: 'ログアウトする', to: '/logout' }
       ]
+    }
+  },
+  computed: {
+    user () {
+      const user = {
+        uid: 2
+      }
+      return user
     }
   }
 }
