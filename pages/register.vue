@@ -37,7 +37,7 @@
             />
             <v-card-actions>
               <v-btn
-                @click.prevent="signIn"
+                @click.prevent="signUp"
                 block
                 color="primary"
               >
@@ -67,13 +67,33 @@ export default {
     }
   },
   methods: {
-    signIn () {
-      this.$store.dispatch('register/register', {
-        email: this.email,
-        password: this.password,
-        name: this.name
-      })
+    async signUp () {
+      try {
+        await this.$axios.$post('/api/v1/auth/register', {
+          name: this.name,
+          email: this.email,
+          password: this.password
+        })
+        this.signIn()
+      } catch (e) {
+        alert(`[Error] ${e}`)
+      }
+    },
+    async signIn () {
+      this.error = null
+      try {
+        await this.$auth.loginWith('local', {
+          data: {
+            email: this.email,
+            password: this.password
+          }
+        })
+        this.$router.push('/timeline')
+      } catch (e) {
+        alert(`[Error] ${e}`)
+      }
     }
+
   }
 }
 </script>
