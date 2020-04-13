@@ -55,6 +55,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL: 'http://127.0.0.1' // TODO: Laravelホストに変更
   },
   /**
    * markdownit module configuration
@@ -92,22 +93,22 @@ export default {
   auth: {
     strategies: {
       local: {
-        endpoints: {
-          login: {
-            url: '/api/login',
-            method: 'POST',
-            propertyName: 'access_token'
-          },
-          logout: {
-            url: '/api/logout',
-            method: 'POST'
-          },
-          user: {
-            url: '/api/me',
-            method: 'POST',
-            propertyName: false
-          }
-        }
+      //   endpoints: {
+      //     login: {
+      //       url: '/api/login',
+      //       method: 'POST',
+      //       propertyName: 'access_token'
+      //     },
+      //     logout: {
+      //       url: '/api/logout',
+      //       method: 'POST'
+      //     },
+      //     user: {
+      //       url: '/api/me',
+      //       method: 'POST',
+      //       propertyName: false
+      //     }
+      //   }
       }
     }
   },
