@@ -22,7 +22,8 @@
           <v-list-item
             v-for="menu in menus"
             :key="menu.title"
-            @click="() => {}"
+            :to="menu.to"
+            nuxt
           >
             <v-list-item-title>{{ menu.title }}</v-list-item-title>
           </v-list-item>
@@ -38,6 +39,9 @@
         </v-row>
         <p class="ma-4 font-weight-bold title text-center">
           G's Chip
+        </p>
+        <p class="text-center">
+          {{ $auth.loggedIn ? $auth.user.name: '' }}
         </p>
 
         <v-row>
