@@ -60,7 +60,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'http://127.0.0.1:8000' // TODO: Laravelサーバに置換
+      target: 'https://fa8d1893.ngrok.io/' // TODO: Laravelサーバに置換
     }
   },
   /**
@@ -101,17 +101,17 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/api/v1/auth/login',
+            url: '/api/login',
             method: 'POST',
             propertyName: 'access_token'
           },
           logout: {
-            url: '/api/v1/auth/logout',
+            url: '/api/logout',
             method: 'POST'
           },
           user: {
-            url: '/api/v1/auth/me',
-            method: 'POST',
+            url: '/api/me',
+            method: 'GET',
             propertyName: false
           }
         }

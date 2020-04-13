@@ -11,7 +11,6 @@ export default {
   methods: {
     async signOut () {
       await this.$auth.logout()
-      this.$store.commit('snackbar/showSnackbar', { text: 'ログアウトに成功しました', color: 'success' })
       this.$router.push('/login')
     }
   }

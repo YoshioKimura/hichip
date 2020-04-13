@@ -41,7 +41,7 @@
           G's Chip
         </p>
         <p class="text-center">
-          {{ $auth.loggedIn ? $auth.user.name: '' }}
+          {{ $auth.loggedIn ? $auth.user.user.name: '' }}
         </p>
 
         <v-row>
