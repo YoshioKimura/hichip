@@ -41,7 +41,7 @@
           G's Chip
         </p>
         <p class="text-center">
-          {{ $auth.loggedIn ? $auth.user.user.name: '' }} {{ $auth.user.access_token }}
+          {{ $auth.loggedIn ? $auth.user.user.name: '' }}
         </p>
 
         <v-row>
@@ -112,7 +112,7 @@
 export default {
   data () {
     return {
-      amount: {},
+      amount: null,
       links: [
         { title: 'タイムライン', to: '/' }
       ],
@@ -132,6 +132,7 @@ export default {
   },
   mounted () {
     console.log('マウンテッド！')
+    console.log(this.$auth)
     this.postAmount()
   },
   methods: {

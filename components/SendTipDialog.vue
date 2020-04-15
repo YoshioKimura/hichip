@@ -87,6 +87,7 @@ export default {
   methods: {
     send () {
       this.check = true
+      this.$emit('post', { point: this.point, comment: this.comment })
     },
     close () {
       this.$emit('close')

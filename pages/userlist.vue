@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-layout justify-start>
-      <template v-for="(colleague, i) in colleagues">
+      <template v-for="(u, i) in users">
         <UserListItem
-          :user="{...colleague, img: `https://i.pravatar.cc/150?id=${Math.ceil(Math.random()*5)}`}"
+          :user="{...u, img: `https://i.pravatar.cc/150?id=${Math.ceil(Math.random()*5)}`}"
           :key="i"
           @openDialog="openDialog"
         />
@@ -12,6 +12,7 @@
     <SendTipDialog
       :dialog="dialog"
       :user="user"
+      @post="sendChips"
       @close="dialog=false"
     />
   </v-container>
@@ -34,33 +35,48 @@ export default {
     }
   },
   computed: {
-    users () {
-      return [
-        {
-          id: 54,
-          name: '山下智久',
-          img: 'https://i.pravatar.cc/150?img=1'
-        },
-        {
-          id: 2,
-          name: '三浦春馬',
-          img: 'https://i.pravatar.cc/150?img=2'
-        }
-      ]
-    }
+    // users () {
+    //   return [
+    //     {
+    //       id: 54,
+    //       name: '山下智久',
+    //       img: 'https://i.pravatar.cc/150?img=1'
+    //     },
+    //     {
+    //       id: 2,
+    //       name: '三浦春馬',
+    //       img: 'https://i.pravatar.cc/150?img=2'
+    //     }
+    //   ]
+    // }
   },
   async asyncData ({ $axios, $auth }) {
-    const colleagues = await $axios.$post('/api/users/colleague', {}, {
+    const users = await $axios.$post('/api/users/colleague', {}, {
       headers: {
         Authorization: `Bearer  ${$auth.user.access_token}`
       }
     })
-    return { colleagues }
+    return { users }
   },
   methods: {
     openDialog (user) {
       this.user = user
       this.dialog = true
+    },
+    async sendChips (args) {
+      await this.$axios.$post(`/api/chips/send`, {
+        user: {
+          id: this.user.id,
+          name: this.user.name,
+          email: this.user.email
+        },
+        send: args.point
+      }, {
+        headers: {
+          Authorization: `Bearer  ${this.$auth.user.access_token}`
+        }
+      })
+      await this.$router.push('/')
     }
   }
 }
