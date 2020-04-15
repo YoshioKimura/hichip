@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-layout justify-start>
-      <template v-for="(user, i) in users">
+      <template v-for="(colleague, i) in colleagues">
         <UserListItem
-          :user="user"
+          :user="{...colleague, img: `https://i.pravatar.cc/150?id=${Math.ceil(Math.random()*5)}`}"
           :key="i"
           @openDialog="openDialog"
         />
@@ -50,12 +50,12 @@ export default {
     }
   },
   async asyncData ({ $axios, $auth }) {
-    const colleague = await $axios.$post('/api/users/colleague', {}, {
+    const colleagues = await $axios.$post('/api/users/colleague', {}, {
       headers: {
         Authorization: `Bearer  ${$auth.user.access_token}`
       }
     })
-    return { colleague }
+    return { colleagues }
   },
   methods: {
     openDialog (user) {
