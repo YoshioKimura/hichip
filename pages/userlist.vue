@@ -49,6 +49,14 @@ export default {
       ]
     }
   },
+  async asyncData ({ $axios, $auth }) {
+    const colleague = await $axios.$post('/api/users/colleague', {}, {
+      headers: {
+        Authorization: `Bearer  ${$auth.user.access_token}`
+      }
+    })
+    return { colleague }
+  },
   methods: {
     openDialog (user) {
       this.user = user
