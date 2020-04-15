@@ -60,7 +60,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'https://c105656f.ngrok.io/' // TODO: Laravelサーバに置換
+      target: 'http://127.0.0.1:8000' // TODO: Laravelサーバに置換
     }
   },
   /**

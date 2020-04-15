@@ -41,7 +41,7 @@
           G's Chip
         </p>
         <p class="text-center">
-          {{ $auth.loggedIn ? $auth.user.user.name: '' }}
+          {{ $auth.loggedIn ? $auth.user.user.name: '' }} {{ $auth.user.access_token }}
         </p>
 
         <v-row>
@@ -51,7 +51,7 @@
                 今月もらった
               </p>
               <p class="text-center mb-1">
-                XXポイント
+                {{ amount }}ポイント
               </p>
             </div>
           </v-col>
@@ -112,6 +112,7 @@
 export default {
   data () {
     return {
+      amount: {},
       links: [
         { title: 'タイムライン', to: '/' }
       ],
@@ -127,6 +128,22 @@ export default {
         uid: 2
       }
       return user
+    }
+  },
+  mounted () {
+    console.log('マウンテッド！')
+    this.postAmount()
+  },
+  methods: {
+    async postAmount () {
+      this.amount = await this.$axios.$post(`/api/chips/amount`, {
+        type: 'receipt',
+        range: 7
+      }, {
+        headers: {
+          Authorization: `Bearer  ${this.$auth.user.access_token}`
+        }
+      })
     }
   }
 }
