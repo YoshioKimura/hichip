@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import variable from '@/mixins/variable'
 import TimeLineItem from '@/components/TimeLineItem'
 import SendTipDialog from '@/components/SendTipDialog'
 
@@ -85,7 +84,6 @@ export default {
     TimeLineItem,
     SendTipDialog
   },
-  mixins: [variable],
   layout: 'user',
   data () {
     return {
