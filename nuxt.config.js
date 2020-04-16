@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+const env = require(`./env.js`)
 
 export default {
   mode: 'universal',
@@ -60,7 +61,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'https://ec31fcac.ngrok.io' // TODO: Laravelサーバに置換
+      target: env.apiTarget // TODO: Laravelサーバに置換
     }
   },
   /**
