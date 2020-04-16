@@ -61,7 +61,7 @@
                 今週おくれる
               </p>
               <p class="text-center mb-1">
-                XXポイント
+                {{ available }}ポイント
               </p>
             </div>
           </v-col>
@@ -113,6 +113,7 @@ export default {
   data () {
     return {
       amount: null,
+      available: 0,
       links: [
         { title: 'タイムライン', to: '/' }
       ],
@@ -134,6 +135,7 @@ export default {
     console.log('マウンテッド！')
     console.log(this.$auth)
     this.postAmount()
+    this.postAvailable()
   },
   methods: {
     async postAmount () {
@@ -143,6 +145,15 @@ export default {
       }, {
         headers: {
           Authorization: `Bearer  ${this.$auth.user.access_token}`
+        }
+      })
+    },
+    async postAvailable () {
+      this.available = await this.$axios.$post(`/api/chips/available`, {
+        type: 'receipt'
+      }, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
         }
       })
     }
