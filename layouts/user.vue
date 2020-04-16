@@ -51,7 +51,7 @@
                 今月もらった
               </p>
               <p class="text-center mb-1">
-                {{ amount }}ポイント
+                {{ amountRange }}ポイント<br><small>(累計：{{ amount }})</small>
               </p>
             </div>
           </v-col>
@@ -112,7 +112,8 @@
 export default {
   data () {
     return {
-      amount: null,
+      amount: 0,
+      amountRange: 0,
       available: 0,
       links: [
         { title: 'タイムライン', to: '/' }
@@ -132,19 +133,27 @@ export default {
     }
   },
   mounted () {
-    console.log('マウンテッド！')
-    console.log(this.$auth)
     this.postAmount()
+    this.postAmountRange()
     this.postAvailable()
   },
   methods: {
     async postAmount () {
       this.amount = await this.$axios.$post(`/api/chips/amount`, {
+        type: 'receipt'
+      }, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
+    },
+    async postAmountRange () {
+      this.amountRange = await this.$axios.$post(`/api/chips/amount`, {
         type: 'receipt',
         range: 7
       }, {
         headers: {
-          Authorization: `Bearer  ${this.$auth.user.access_token}`
+          Authorization: localStorage.getItem('auth._token.local')
         }
       })
     },
