@@ -9,9 +9,9 @@
         {{ tab.label }}
       </v-tab>
     </v-tabs>
-    <template v-for="(itme, i) in itmes">
+    <template v-for="(post, i) in posts">
       <TimeLineItem
-        :item="itme"
+        :item="post"
         :key="i"
       />
       <v-divider :key="i" />
@@ -29,6 +29,7 @@ export default {
   },
   data () {
     return {
+      posts: [],
       tabs: [
         { label: 'すべて', type: 'all' },
         { label: 'もらった', type: 'take' },
@@ -37,45 +38,19 @@ export default {
       ]
     }
   },
-  computed: {
-    itmes () {
-      return [
-        {
-          id: 1,
-          to: {
-            uid: 54,
-            name: '三浦大知',
-            img: 'https://i.pravatar.cc/160?img=2'
-          },
-          from: {
-            uid: 2,
-            name: '山下智久',
-            img: 'https://i.pravatar.cc/160?img=1'
-          },
-          point: 39,
-          comment: 'ピアボーナスサービス'
-        },
-        {
-          id: 2,
-          to: {
-            uid: 2,
-            name: '山下智久',
-            img: 'https://i.pravatar.cc/160?img=1'
-          },
-          from: {
-            uid: 54,
-            name: '三浦大知',
-            img: 'https://i.pravatar.cc/160?img=2'
-          },
-          point: 39,
-          comment: 'ピアボーナスサービス'
-        }
-      ]
-    }
+  mounted () {
+    this.getPosts()
   },
   methods: {
     click (type) {
       alert(type)
+    },
+    async getPosts () {
+      this.posts = await this.$axios.$get(`/api/posts`, {}, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
     }
   }
 }
