@@ -6,10 +6,10 @@
         flat
         tile
       >
-        <v-img :src="user.img" />
+        <v-img :src="`https://i.pravatar.cc/160?img=${setUser.id}`" />
         <v-card-actions>
           <v-btn
-            v-if="$route.params.id == origUser.uid"
+            v-if="$route.params.id == setUser.id"
             @click="changeAvatar()"
             block
             outlined
@@ -27,11 +27,11 @@
       >
         <v-text-field
           :value="user.name"
-          :disabled="$route.params.id != origUser.uid"
+          :disabled="$route.params.id != setUser.id"
           label="表示名"
         />
         <v-btn
-          v-if="$route.params.id == origUser.uid"
+          v-if="$route.params.id == setUser.id"
           outlined
           rounded
           color="primary"
@@ -40,7 +40,7 @@
         </v-btn>
         <v-card-actions>
           <v-btn
-            v-if="$route.params.id != origUser.uid"
+            v-if="$route.params.id != setUser.id"
             @click="sendTip()"
             rounded
             outlined
@@ -76,19 +76,21 @@
 </template>
 
 <script>
+import variable from '@/mixins/variable'
 import TimeLineItem from '@/components/TimeLineItem'
 import SendTipDialog from '@/components/SendTipDialog'
 
 export default {
-  layout: 'user',
   components: {
     TimeLineItem,
     SendTipDialog
   },
+  mixins: [variable],
+  layout: 'user',
   data () {
     return {
       dialog: false,
-      user: {},
+      setUser: {},
       tabs: [
         { label: 'もらった', type: 'take' },
         { label: 'おくった', type: 'give' },
@@ -97,13 +99,6 @@ export default {
     }
   },
   computed: {
-    origUser () {
-      return {
-        uid: 2,
-        name: '山下智久',
-        img: 'https://i.pravatar.cc/150?img=1'
-      }
-    },
     itmes () {
       return [
         {
@@ -139,18 +134,8 @@ export default {
       ]
     }
   },
-  watch: {
-    origUser (val) {
-      this.user = val
-    }
-  },
   mounted () {
-    // dummy
-    this.user = {
-      id: this.$route.params.id,
-      name: '山下智久',
-      img: 'https://i.pravatar.cc/150?img=1'
-    }
+    this.setUser = this.user
   },
   methods: {
     click (type) {

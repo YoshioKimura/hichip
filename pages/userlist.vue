@@ -53,7 +53,7 @@ export default {
   async asyncData ({ $axios, $auth }) {
     const users = await $axios.$post('/api/users/colleague', {}, {
       headers: {
-        Authorization: `Bearer  ${$auth.user.access_token}`
+        Authorization: localStorage.getItem('auth._token.local')
       }
     })
     return { users }
@@ -73,7 +73,7 @@ export default {
         send: args.point
       }, {
         headers: {
-          Authorization: `Bearer  ${this.$auth.user.access_token}`
+          Authorization: localStorage.getItem('auth._token.local')
         }
       })
       await this.$router.push('/')
