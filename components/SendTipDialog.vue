@@ -19,7 +19,7 @@
         </div>
         <v-text-field
           v-model="point"
-          label="送るポイント数(半角数字)"
+          label="おくるポイント数(半角数字)"
           type="number"
         />
         <v-textarea
@@ -29,11 +29,12 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
+          :disabled="available < point"
           @click.prevent="send"
           block
           color="primary"
         >
-          チップを贈る
+          チップをおくる
         </v-btn>
       </v-card-actions>
     </v-card>

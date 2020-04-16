@@ -58,7 +58,7 @@
           <v-col>
             <div>
               <p class="text-center caption mb-1">
-                今週使える
+                今週おくれる
               </p>
               <p class="text-center mb-1">
                 XXポイント
@@ -117,7 +117,7 @@ export default {
         { title: 'タイムライン', to: '/' }
       ],
       menus: [
-        { title: 'チップを送る', to: '/userlist' },
+        { title: 'チップをおくる', to: '/userlist' },
         { title: 'ログアウトする', to: '/logout' }
       ]
     }
