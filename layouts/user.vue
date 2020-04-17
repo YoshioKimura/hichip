@@ -41,7 +41,7 @@
           G's Chip
         </p>
         <p class="text-center">
-          {{ $auth.loggedIn ? $auth.user.user.name: '' }}
+          {{ $auth.loggedIn ? $auth.user.name: '' }}
         </p>
 
         <v-row>
@@ -51,17 +51,17 @@
                 今月もらった
               </p>
               <p class="text-center mb-1">
-                {{ amount }}ポイント
+                {{ amountRange }}ポイント<br><small>(累計：{{ amount }})</small>
               </p>
             </div>
           </v-col>
           <v-col>
             <div>
               <p class="text-center caption mb-1">
-                今週使える
+                今週おくれる
               </p>
               <p class="text-center mb-1">
-                XXポイント
+                {{ available }}ポイント
               </p>
             </div>
           </v-col>
@@ -85,19 +85,12 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          :to="`/${user.uid}`"
+          v-if="$auth.user && $auth.user.admin"
+          to="/master"
           nuxt
         >
           <v-list-item-content>
-            <v-list-item-title>マイページ</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
-          to="/prologue"
-          nuxt
-        >
-          <v-list-item-content>
-            <v-list-item-title>プロローグ</v-list-item-title>
+            <v-list-item-title>管理画面</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -110,39 +103,55 @@
 
 <script>
 export default {
+  // middleware: 'auth',
   data () {
+    const myid = this.$auth.loggedIn ? this.$auth.user.id : 0
     return {
-      amount: null,
+      amount: 0,
+      amountRange: 0,
+      available: 0,
       links: [
-        { title: 'タイムライン', to: '/' }
+        { title: 'タイムライン', to: '/' },
+        { title: 'マイページ', to: `/${myid}` },
+        { title: 'プロローグ', to: '/prologue' }
       ],
       menus: [
-        { title: 'チップを送る', to: '/userlist' },
+        { title: 'チップをおくる', to: '/userlist' },
         { title: 'ログアウトする', to: '/logout' }
       ]
     }
   },
-  computed: {
-    user () {
-      const user = {
-        uid: 2
-      }
-      return user
-    }
-  },
   mounted () {
-    console.log('マウンテッド！')
-    console.log(this.$auth)
     this.postAmount()
+    this.postAmountRange()
+    this.postAvailable()
   },
   methods: {
     async postAmount () {
       this.amount = await this.$axios.$post(`/api/chips/amount`, {
+        type: 'receipt'
+      }, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
+    },
+    async postAmountRange () {
+      this.amountRange = await this.$axios.$post(`/api/chips/amount`, {
         type: 'receipt',
         range: 7
       }, {
         headers: {
-          Authorization: `Bearer  ${this.$auth.user.access_token}`
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
+    },
+    async postAvailable () {
+      this.available = await this.$axios.$post(`/api/chips/available`, {
+        type: 'receipt'
+      }, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
         }
       })
     }

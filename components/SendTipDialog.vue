@@ -15,11 +15,11 @@
       </v-card-title>
       <v-card-text>
         <div>
-          おくれるポイント数: {{ hasPint }}
+          おくれるポイント数: {{ available }}
         </div>
         <v-text-field
           v-model="point"
-          label="送るポイント数(半角数字)"
+          label="おくるポイント数(半角数字)"
           type="number"
         />
         <v-textarea
@@ -29,11 +29,12 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
+          :disabled="available < point"
           @click.prevent="send"
           block
           color="primary"
         >
-          チップを贈る
+          チップをおくる
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -76,13 +77,12 @@ export default {
     return {
       comment: '',
       point: '',
-      check: false
+      check: false,
+      available: 0
     }
   },
-  computed: {
-    hasPint () {
-      return 0
-    }
+  mounted () {
+    this.postAvailable()
   },
   methods: {
     send () {
@@ -92,6 +92,15 @@ export default {
     close () {
       this.$emit('close')
       this.check = false
+    },
+    async postAvailable () {
+      this.available = await this.$axios.$post(`/api/chips/available`, {
+        type: 'receipt'
+      }, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
     }
   }
 }

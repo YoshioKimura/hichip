@@ -35,6 +35,7 @@
 
 <script>
 export default {
+  // middleware: 'auth-admin',
   data () {
     return {
       // 本来だとmenu一列でmenuごとにrole持つのが正しい

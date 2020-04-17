@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+const env = require(`./env.js`)
 
 export default {
   mode: 'universal',
@@ -30,6 +31,9 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    {
+      src: '@/plugins/chart'
+    }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -60,7 +64,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'https://ec31fcac.ngrok.io/' // TODO: Laravelサーバに置換
+      target: env.apiTarget // TODO: Laravelサーバに置換
     }
   },
   /**
@@ -97,6 +101,12 @@ export default {
   },
 
   auth: {
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      callback: false,
+      home: '/'
+    },
     strategies: {
       local: {
         endpoints: {

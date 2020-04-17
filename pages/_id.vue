@@ -6,10 +6,10 @@
         flat
         tile
       >
-        <v-img :src="user.img" />
+        <v-img :src="`https://i.pravatar.cc/160?img=${setUser.id}`" />
         <v-card-actions>
           <v-btn
-            v-if="$route.params.id == origUser.uid"
+            v-if="$route.params.id == setUser.id"
             @click="changeAvatar()"
             block
             outlined
@@ -26,12 +26,12 @@
         tile
       >
         <v-text-field
-          :value="user.name"
-          :disabled="$route.params.id != origUser.uid"
+          :value="setUser.name"
+          :disabled="$route.params.id != setUser.id"
           label="表示名"
         />
         <v-btn
-          v-if="$route.params.id == origUser.uid"
+          v-if="$route.params.id == setUser.id"
           outlined
           rounded
           color="primary"
@@ -40,7 +40,7 @@
         </v-btn>
         <v-card-actions>
           <v-btn
-            v-if="$route.params.id != origUser.uid"
+            v-if="$route.params.id != setUser.id"
             @click="sendTip()"
             rounded
             outlined
@@ -60,16 +60,16 @@
         {{ tab.label }}
       </v-tab>
     </v-tabs>
-    <template v-for="(itme, i) in itmes">
+    <template v-for="(post, i) in posts">
       <TimeLineItem
-        :item="itme"
+        :item="post"
         :key="i"
       />
       <v-divider :key="i" />
     </template>
     <SendTipDialog
       :dialog="dialog"
-      :user="user"
+      :user="setUser"
       @close="dialog=false"
     />
   </v-container>
@@ -80,81 +80,41 @@ import TimeLineItem from '@/components/TimeLineItem'
 import SendTipDialog from '@/components/SendTipDialog'
 
 export default {
-  layout: 'user',
   components: {
     TimeLineItem,
     SendTipDialog
   },
+  layout: 'user',
   data () {
     return {
       dialog: false,
-      user: {},
+      setUser: {
+        name: '',
+        id: 0
+      },
+      posts: [],
       tabs: [
-        { label: 'もらった', type: 'take' },
-        { label: 'おくった', type: 'give' },
-        { label: 'いいねした', type: 'like' }
+        { label: 'もらった', type: '/api/posts/receipt' },
+        { label: 'おくった', type: '/api/posts/sent' },
+        { label: 'いいねした', type: '/api/favorites/sent' }
       ]
     }
   },
   computed: {
-    origUser () {
-      return {
-        uid: 2,
-        name: '山下智久',
-        img: 'https://i.pravatar.cc/150?img=1'
-      }
-    },
-    itmes () {
-      return [
-        {
-          id: 1,
-          to: {
-            uid: 54,
-            name: '三浦大知',
-            img: 'https://i.pravatar.cc/160?img=2'
-          },
-          from: {
-            uid: 2,
-            name: '山下智久',
-            img: 'https://i.pravatar.cc/160?img=1'
-          },
-          point: 39,
-          comment: 'ピアボーナスサービス'
-        },
-        {
-          id: 2,
-          to: {
-            uid: 2,
-            name: '山下智久',
-            img: 'https://i.pravatar.cc/160?img=1'
-          },
-          from: {
-            uid: 54,
-            name: '三浦大知',
-            img: 'https://i.pravatar.cc/160?img=2'
-          },
-          point: 39,
-          comment: 'ピアボーナスサービス'
-        }
-      ]
-    }
-  },
-  watch: {
-    origUser (val) {
-      this.user = val
-    }
   },
   mounted () {
-    // dummy
-    this.user = {
-      id: this.$route.params.id,
-      name: this.$auth.user.user.name,
-      img: 'https://i.pravatar.cc/150?img=1'
-    }
+    this.getPosts('/api/posts')
   },
   methods: {
     click (type) {
-      alert(type)
+      this.getPosts(type)
+    },
+    async getPosts (type) {
+      this.posts = await this.$axios.$get(type, {}, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
     },
     changeAvatar () {
       alert('変更')
