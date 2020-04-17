@@ -22,7 +22,7 @@
             :to="`?uid=${item.receiver_id}`"
             class="font-weight-black"
           >
-            {{ item.receiver_id}}
+            {{ item.receiver_id }}
           </nuxt-link>
           さんへ
           <span class="font-weight-black">
