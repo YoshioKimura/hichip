@@ -31,22 +31,22 @@ export default {
     return {
       posts: [],
       tabs: [
-        { label: 'すべて', type: 'all' },
-        { label: 'もらった', type: 'take' },
-        { label: 'おくった', type: 'give' },
-        { label: 'いいねした', type: 'like' }
+        { label: 'すべて', type: '/api/posts' },
+        { label: 'もらった', type: '/api/chips/receipt' },
+        { label: 'おくった', type: '/api/chips/sent' },
+        { label: 'いいねした', type: '/api/favorites/sent' }
       ]
     }
   },
   mounted () {
-    this.getPosts()
+    this.getPosts('/api/posts')
   },
   methods: {
     click (type) {
-      alert(type)
+      this.getPosts(type)
     },
-    async getPosts () {
-      this.posts = await this.$axios.$get(`/api/posts`, {}, {
+    async getPosts (type) {
+      this.posts = await this.$axios.$get(type, {}, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
         }

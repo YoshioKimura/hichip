@@ -26,7 +26,7 @@
         tile
       >
         <v-text-field
-          :value="user.name"
+          :value="setUser.name"
           :disabled="$route.params.id != setUser.id"
           label="表示名"
         />
@@ -60,16 +60,16 @@
         {{ tab.label }}
       </v-tab>
     </v-tabs>
-    <template v-for="(itme, i) in itmes">
+    <template v-for="(post, i) in posts">
       <TimeLineItem
-        :item="itme"
+        :item="post"
         :key="i"
       />
       <v-divider :key="i" />
     </template>
     <SendTipDialog
       :dialog="dialog"
-      :user="user"
+      :user="setUser"
       @close="dialog=false"
     />
   </v-container>
@@ -88,56 +88,33 @@ export default {
   data () {
     return {
       dialog: false,
-      setUser: {},
+      setUser: {
+        name: '',
+        id: 0
+      },
+      posts: [],
       tabs: [
-        { label: 'もらった', type: 'take' },
-        { label: 'おくった', type: 'give' },
-        { label: 'いいねした', type: 'like' }
+        { label: 'もらった', type: '/api/posts/receipt' },
+        { label: 'おくった', type: '/api/posts/sent' },
+        { label: 'いいねした', type: '/api/favorites/sent' }
       ]
     }
   },
   computed: {
-    itmes () {
-      return [
-        {
-          id: 1,
-          to: {
-            uid: 54,
-            name: '三浦大知',
-            img: 'https://i.pravatar.cc/160?img=2'
-          },
-          from: {
-            uid: 2,
-            name: '山下智久',
-            img: 'https://i.pravatar.cc/160?img=1'
-          },
-          point: 39,
-          comment: 'ピアボーナスサービス'
-        },
-        {
-          id: 2,
-          to: {
-            uid: 2,
-            name: '山下智久',
-            img: 'https://i.pravatar.cc/160?img=1'
-          },
-          from: {
-            uid: 54,
-            name: '三浦大知',
-            img: 'https://i.pravatar.cc/160?img=2'
-          },
-          point: 39,
-          comment: 'ピアボーナスサービス'
-        }
-      ]
-    }
   },
   mounted () {
-    this.setUser = this.user
+    this.getPosts('/api/posts')
   },
   methods: {
     click (type) {
-      alert(type)
+      this.getPosts(type)
+    },
+    async getPosts (type) {
+      this.posts = await this.$axios.$get(type, {}, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
     },
     changeAvatar () {
       alert('変更')
