@@ -104,6 +104,7 @@ export default {
   },
   mounted () {
     this.getPosts('/api/posts')
+    this.getUser()
   },
   methods: {
     click (type) {
@@ -111,6 +112,13 @@ export default {
     },
     async getPosts (type) {
       this.posts = await this.$axios.$get(type, {}, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
+    },
+    async getUser () {
+      this.setUser = await this.$axios.$get(`/api/users/${this.$route.params.id}`, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
         }
