@@ -5,24 +5,24 @@
   >
     <v-card-text class="d-flex flex-row align-center">
       <v-avatar size="40" class="mr-4">
-        <v-img :src="`https://i.pravatar.cc/160?img=${item.label==='もらった'?item.sender_name: item.receiver_name}`" />
+        <v-img :src="`https://i.pravatar.cc/160?img=${label==='もらった'?item.sender_name: item.receiver_name}`" />
       </v-avatar>
       <div>
         <div>
-          <v-chip :color="item.label==='もらった'?'cyan':'light-green'" small class="mr-2" c>
-            {{ item.label }}
+          <v-chip :color="label==='もらった'?'cyan':'light-green'" small class="mr-2" c>
+            {{ label }}
           </v-chip>
           <nuxt-link
             :to="`/${item.sender_id}`"
             class="font-weight-black"
           >
-            {{ item.label==="もらった"?item.sender_name: item.receiver_name }}
+            {{ label==="もらった"?item.sender_name: item.receiver_name }}
           </nuxt-link>
-          さん{{ item.label==="もらった"? 'から': 'へ' }}
+          さん{{ label==="もらった"? 'から': 'へ' }}
           <span class="font-weight-bold title">
             {{ item.amount }}
           </span>
-          ポイント{{ item.label==="もらった"? 'が贈られました！': 'を贈りました！' }}
+          ポイント{{ label==="もらった"? 'が贈られました！': 'を贈りました！' }}
         </div>
         <div>
           {{ item.comment }}
@@ -41,6 +41,10 @@ export default {
     item: {
       type: Object,
       default: () => {}
+    },
+    label: {
+      type: String,
+      default: ''
     }
   }
 }

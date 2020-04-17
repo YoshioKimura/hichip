@@ -6,7 +6,7 @@
         flat
         tile
       >
-        <v-img :src="`https://i.pravatar.cc/160?img=${setUser.id}`" />
+        <v-img :src="`https://i.pravatar.cc/160?img=${$route.params.id}`" />
         <v-card-actions>
           <v-btn
             v-if="$route.params.id == setUser.id"
@@ -26,21 +26,22 @@
         tile
       >
         <v-text-field
-          :value="setUser.name"
-          :disabled="$route.params.id != setUser.id"
+          v-model="setUser.name"
+          :disabled="$route.params.id != $auth.user.id"
           label="表示名"
         />
         <v-btn
-          v-if="$route.params.id == setUser.id"
+          v-if="$route.params.id == $auth.user.id"
+          @click="patchUser"
           outlined
           rounded
           color="primary"
         >
-          保存
+          更新
         </v-btn>
         <v-card-actions>
           <v-btn
-            v-if="$route.params.id != setUser.id"
+            v-if="$route.params.id != $auth.user.id"
             @click="sendTip()"
             rounded
             outlined
@@ -90,7 +91,8 @@ export default {
       dialog: false,
       setUser: {
         name: '',
-        id: 0
+        id: 0,
+        email: ''
       },
       posts: [],
       tabs: [
@@ -102,7 +104,7 @@ export default {
   },
   computed: {
   },
-  mounted () {
+  created () {
     this.getPosts('/api/posts')
     this.getUser()
   },
@@ -118,17 +120,30 @@ export default {
       })
     },
     async getUser () {
-      this.setUser = await this.$axios.$get(`/api/users/${this.$route.params.id}`, {
+      const user = await this.$axios.$get(`/api/users/${this.$route.params.id}`, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
+      this.setUser = {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      }
     },
     changeAvatar () {
       alert('変更')
     },
     sendTip () {
       this.dialog = true
+    },
+    async patchUser () {
+      this.posts = await this.$axios.$patch(`/api/users/${this.setUser.id}`, this.setUser, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
+      this.$store.dispatch('snackbar/setSnackbar', { text: `ユーザデータを更新しました` })
     }
   }
 }

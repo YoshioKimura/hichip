@@ -11,6 +11,7 @@
     </v-tabs>
     <template v-for="(post, i) in posts">
       <TimeLineItem
+        :label="post.label"
         :item="{...post, sender_name: getUserName(post.sender_id), receiver_name: getUserName(post.receiver_id)}"
         :key="i"
       />
