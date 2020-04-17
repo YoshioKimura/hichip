@@ -34,22 +34,6 @@ export default {
       user: {}
     }
   },
-  computed: {
-    // users () {
-    //   return [
-    //     {
-    //       id: 54,
-    //       name: '山下智久',
-    //       img: 'https://i.pravatar.cc/150?img=1'
-    //     },
-    //     {
-    //       id: 2,
-    //       name: '三浦春馬',
-    //       img: 'https://i.pravatar.cc/150?img=2'
-    //     }
-    //   ]
-    // }
-  },
   async asyncData ({ $axios, $auth }) {
     const users = await $axios.$post('/api/users/colleague', {}, {
       headers: {
