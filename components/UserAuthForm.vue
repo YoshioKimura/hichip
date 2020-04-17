@@ -2,9 +2,9 @@
   <v-form v-model="valid">
     <v-text-field
       v-model="userInfo.email"
-      :rules="[required('email')]"
-      label="メールアドレス"
-      name="email"
+      :rules="[required('name')]"
+      label="ユーザー名"
+      name="name"
     />
     <v-text-field
       v-model="userInfo.pw"
@@ -12,7 +12,6 @@
       :append-icon="showPw ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[required('pw')]"
       @click:append="showPw = !showPw"
-      counter
       label="パスワード"
       name="current-password"
     />
