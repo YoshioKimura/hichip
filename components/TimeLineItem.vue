@@ -1,37 +1,34 @@
 <template>
   <v-card
-    @click="sendTip"
     class="d-flex ma-2"
     flat
   >
-    {{ item }}
-    <v-card-text class="d-flex flex-row">
+    <v-card-text class="d-flex flex-row align-center">
       <v-avatar size="40" class="mr-4">
-        <v-img :src="`https://i.pravatar.cc/160?img=${item.receiver_id}`" />
+        <v-img :src="`https://i.pravatar.cc/160?img=${item.label==='もらった'?item.sender_name: item.receiver_name}`" />
       </v-avatar>
       <div>
         <div>
+          <v-chip :color="item.label==='もらった'?'cyan':'light-green'" small class="mr-2" c>
+            {{ item.label }}
+          </v-chip>
           <nuxt-link
-            :to="`?uid=${item.receiver_id}`"
+            :to="`/${item.sender_id}`"
             class="font-weight-black"
           >
-            {{ item.receiver_id }}
+            {{ item.label==="もらった"?item.sender_name: item.receiver_name }}
           </nuxt-link>
-          さんから
-          <nuxt-link
-            :to="`?uid=${item.receiver_id}`"
-            class="font-weight-black"
-          >
-            {{ item.receiver_id }}
-          </nuxt-link>
-          さんへ
-          <span class="font-weight-black">
-            {{ item.point }}
+          さん{{ item.label==="もらった"? 'から': 'へ' }}
+          <span class="font-weight-bold title">
+            {{ item.amount }}
           </span>
-          ポイント贈られました！
+          ポイント{{ item.label==="もらった"? 'が贈られました！': 'を贈りました！' }}
         </div>
         <div>
           {{ item.comment }}
+        </div>
+        <div>
+          {{ $moment(item.created_at).format('YYYY年MM月DD日 HH:MM') }}
         </div>
       </div>
     </v-card-text>
