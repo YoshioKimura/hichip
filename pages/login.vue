@@ -7,7 +7,7 @@
       align="center"
       justify="center"
     >
-      <v-col
+      <v-coly
         cols="12"
         sm="8"
         md="6"
@@ -17,11 +17,14 @@
             ログイン
           </v-card-title>
           <v-card-text>
-            <UserAuthFrom btnText="ログイン" />
+            <UserAuthFrom
+              @click="signIn"
+              btn-text="ログイン"
+            />
           </v-card-text>
           <SignInSocial v-if="false" />
         </v-card>
-      </v-col>
+      </v-coly>
     </v-row>
   </v-container>
 </template>
@@ -34,17 +37,15 @@ export default {
   },
   data () {
     return {
-      password: '',
-      email: ''
     }
   },
   methods: {
-    async signIn () {
+    async signIn (args) {
       try {
         await this.$auth.loginWith('local', {
           data: {
-            email: this.email,
-            password: this.password
+            email: args.email,
+            password: args.pw
           }
         })
         this.$router.push('/')

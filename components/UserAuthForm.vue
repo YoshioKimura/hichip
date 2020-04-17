@@ -28,7 +28,7 @@
 import validations from '@/utils/validations'
 
 export default {
-  props: ['submitForm', 'btnText', 'hasName'],
+  props: ['btnText', 'hasName'],
   data () {
     return {
       valid: false,
@@ -54,6 +54,9 @@ export default {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
+    },
+    submitForm (userInfo) {
+      this.$emit('click', userInfo)
     }
   }
 }
