@@ -70,8 +70,6 @@ export default {
         }
       })
 
-      alert(chip.id)
-
       const send = await this.$axios.$post(`/api/posts/send`, {
         user: {
           id: this.user.id,

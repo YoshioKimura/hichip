@@ -9,7 +9,6 @@
         {{ tab.label }}
       </v-tab>
     </v-tabs>
-    {{ favorites }} {{ countFavoriteNum(23) }}
     <v-row justify="center">
       <v-col cols="12" sm="11" md="10">
         <template v-for="(post, i) in posts">
@@ -117,11 +116,11 @@ export default {
         }
       })
     },
-    async sendFavorite (item) {
-      // TODO: ファボ送信
+    async sendFavorite (id) {
+      // TODO: postにpostidを代入する
       try {
         const result = await this.$axios.$post('/api/favorites', {
-          post: item,
+          post: 46,
           type: 'Smile'
         }, {
           headers: {
@@ -146,9 +145,6 @@ export default {
       }
       const setUsers = new Set(users)
       return [...setUsers].length
-    },
-    isPushFavorite (postId) {
-
     }
   }
 }
