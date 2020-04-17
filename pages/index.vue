@@ -46,7 +46,7 @@ export default {
       this.getPosts(type)
     },
     async getPosts (type) {
-      this.posts = await this.$axios.$get(type, {}, {
+      this.posts = await this.$axios.$post(type, {}, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
         }
