@@ -148,7 +148,7 @@ export default {
     // dummy
     this.user = {
       id: this.$route.params.id,
-      name: '山下智久',
+      name: this.$auth.user.user.name,
       img: 'https://i.pravatar.cc/150?img=1'
     }
   },

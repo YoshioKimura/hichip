@@ -60,7 +60,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'https://ec31fcac.ngrok.io' // TODO: Laravelサーバに置換
+      target: 'https://ec31fcac.ngrok.io/' // TODO: Laravelサーバに置換
     }
   },
   /**

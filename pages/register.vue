@@ -88,7 +88,7 @@ export default {
             password: this.password
           }
         })
-        this.$router.push('/timeline')
+        this.$router.push('/')
       } catch (e) {
         alert(`[Error] ${e}`)
       }
