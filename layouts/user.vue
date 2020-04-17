@@ -85,19 +85,12 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          :to="`/${$auth.loggedIn ? $auth.user.id: 0 }`"
+          v-if="$auth.user && $auth.user.admin"
+          to="/master"
           nuxt
         >
           <v-list-item-content>
-            <v-list-item-title>マイページ</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
-          to="/prologue"
-          nuxt
-        >
-          <v-list-item-content>
-            <v-list-item-title>プロローグ</v-list-item-title>
+            <v-list-item-title>管理画面</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -112,12 +105,15 @@
 export default {
   // middleware: 'auth',
   data () {
+    const myid = this.$auth.loggedIn ? this.$auth.user.id : 0
     return {
       amount: 0,
       amountRange: 0,
       available: 0,
       links: [
-        { title: 'タイムライン', to: '/' }
+        { title: 'タイムライン', to: '/' },
+        { title: 'マイページ', to: `/${myid}` },
+        { title: 'プロローグ', to: '/prologue' }
       ],
       menus: [
         { title: 'チップをおくる', to: '/userlist' },
