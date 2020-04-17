@@ -1,15 +1,21 @@
 <template>
   <v-container>
-    <v-tabs>
-      <v-tab
-        v-for="(tab, i) in tabs"
-        :key="i"
-        @click="click(tab.type)"
-      >
-        {{ tab.label }}
-      </v-tab>
-    </v-tabs>
-    <line-chart :styles="myStyles" :chart-data="datacollection" />
+    <v-col>
+      <v-card>
+        <v-card-text>
+          <v-tabs>
+            <v-tab
+              v-for="(tab, i) in tabs"
+              :key="i"
+              @click="click(tab.type)"
+            >
+              {{ tab.label }}
+            </v-tab>
+          </v-tabs>
+          <line-chart :style="myStyles" :chart-data="datacollection" />
+        </v-card-text>
+      </v-card>
+    </v-col>
     <v-layout>
       <v-col
         v-for="item in ranking"
@@ -17,21 +23,18 @@
         col="12"
         sm="4"
       >
-        <v-card flat>
-          <v-card-title>
+        <v-card>
+          <div class="pa-2">
             {{ item.label }}
-          </v-card-title>
+          </div>
           <v-card-text>
-            <v-list dense>
-              <v-list-item
-                v-for="(user, i) in getPosts(item.type)"
-                :key="i"
-                dense
-              >
-                <v-list-item-avatar>{{ i + 1 }}</v-list-item-avatar>
-                <v-list-item-content>{{ user.name }}</v-list-item-content>
-              </v-list-item>
-            </v-list>
+            <div
+              v-for="(user, i) in getPosts(item.type)"
+              :key="i"
+            >
+              <span>{{ i + 1 }}</span>
+              <span>{{ user.name }}</span>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -42,65 +45,60 @@
 <script>
 export default {
   layout: 'user',
-  // middleware: 'auth-master',
   data () {
     return {
       myStyles: {
         width: '300px',
         height: '300px'
       },
-      datacollection: null,
+      datacollection: {
+        labels: [],
+        datasets: [{
+          backgroundColor: 'rgba(255, 100, 130, 0.2)',
+          label: '累計',
+          data: []
+        }]
+      },
       tabs: [
         { label: '今年', type: 'year' },
         { label: '今月', type: 'mouth' },
         { label: '今週', type: 'week' }
       ],
       ranking: [
-        { label: '今月おくったポイントが多い人ランキング(20位まで)', type: 'high_sent_employee' },
-        { label: '今月もらったポイントが多い人ランキング(20位まで)', type: 'high_receipt_employee' },
-        { label: '今月拍手した回数が一番多い人ランキング(20位まで)', type: 'high_senf_fav' }
+        { label: '今月おくったポイントが多い人', type: '/api/chips/high_sent_employee' },
+        { label: '今月もらったポイントが多い人', type: '/api/chips/high_receipt_employee' },
+        { label: '今月拍手した回数が一番多い人', type: '' }
       ]
     }
   },
   mounted () {
     this.getTransition('year')
-    this.testData()
   },
   methods: {
     click (type) {
       this.getTransition(type)
     },
     async getTransition (type) {
-      this.posts = await this.$axios.$post(`/api/chips/total_transition`, {
+      const GrafData = await this.$axios.$post(`/api/chips/total_transition`, {
         type
       }, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
-    },
-    testData () {
-      this.datacollection = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
-        datasets: [
-          {
-            label: 'Test Data2',
-            backgroundColor: 'rgba(255, 100, 130, 0.2)',
-            data: [this.getRandomInt(), this.getRandomInt()]
-          }
-        ]
-      }
+      console.log(GrafData)
+      this.datacollection.labels = GrafData.labels
+      this.datacollection.datasets[0].data = GrafData.data
     },
     getRandomInt () {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5
     },
     getPosts (type) {
-      return [{ name: type }, { name: type }]
-      // return this.$axios.$get(type, {}, {
-      //   headers: {
-      //     Authorization: localStorage.getItem('auth._token.local')
-      //   }
-      // })
+      return this.$axios.$post(type, {}, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
     }
   }
 }
