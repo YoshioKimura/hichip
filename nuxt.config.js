@@ -20,7 +20,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: 'blue' },
   /*
   ** Global CSS
   */
@@ -63,7 +63,8 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'https://hi-chip.herokuapp.com' // TODO: Laravelサーバに置換
+      // target: 'https://hi-chip.herokuapp.com' // TODO: Laravelサーバに置換
+      target: 'https://5e506bcd.ngrok.io'
     }
   },
   /**
