@@ -7,7 +7,7 @@
       align="center"
       justify="center"
     >
-      <v-coly
+      <v-col
         cols="12"
         sm="8"
         md="6"
@@ -24,7 +24,7 @@
           </v-card-text>
           <SignInSocial v-if="false" />
         </v-card>
-      </v-coly>
+      </v-col>
     </v-row>
   </v-container>
 </template>
