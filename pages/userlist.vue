@@ -13,7 +13,7 @@
     <SendTipDialog
       :dialog="dialog"
       :user="user"
-      @post="sendChips"
+      @post="send"
       @close="dialog=false"
     />
   </v-container>
@@ -56,8 +56,8 @@ export default {
       this.user = user
       this.dialog = true
     },
-    async sendChips (args) {
-      await this.$axios.$post(`/api/chips/send`, {
+    async send (args) {
+      const chip = await this.$axios.$post(`/api/chips/send`, {
         user: {
           id: this.user.id,
           name: this.user.name,
@@ -69,6 +69,25 @@ export default {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
+
+      alert(chip.id)
+
+      const send = await this.$axios.$post(`/api/posts/send`, {
+        user: {
+          id: this.user.id,
+          name: this.user.name,
+          email: this.user.email
+        },
+        content: args.comment,
+        chip_id: chip.id
+      }, {
+        headers: {
+          Authorization: localStorage.getItem('auth._token.local')
+        }
+      })
+      console.log(chip)
+      console.log('send')
+      console.log(send)
       await this.$router.push('/')
     }
   }

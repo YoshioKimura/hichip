@@ -9,14 +9,21 @@
         {{ tab.label }}
       </v-tab>
     </v-tabs>
-    <template v-for="(post, i) in posts">
-      <TimeLineItem
-        :label="post.label"
-        :item="{...post, sender_name: getUserName(post.sender_id), receiver_name: getUserName(post.receiver_id)}"
-        :key="i"
-      />
-      <v-divider :key="i" />
-    </template>
+    {{ favorites }} {{ countFavoriteNum(23) }}
+    <v-row justify="center">
+      <v-col cols="12" sm="11" md="10">
+        <template v-for="(post, i) in posts">
+          <TimeLineItem
+            :label="post.label"
+            :favorite-num="countFavoriteNum(post.id)"
+            :item="{...post, sender_name: getUserName(post.sender_id), receiver_name: getUserName(post.receiver_id)}"
+            :key="i"
+            @favorite="sendFavorite"
+          />
+          <v-divider :key="i" />
+        </template>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -32,6 +39,7 @@ export default {
     return {
       posts: [],
       colleagues: [],
+      favorites: [],
       currentLabel: 'すべて',
       tabs: [
         { label: 'すべて', type: '/api/chips/receipt' },
@@ -42,6 +50,7 @@ export default {
     }
   },
   mounted () {
+    this.getFavorites()
     this.getColleagues()
     this.getAllPosts()
   },
@@ -107,6 +116,39 @@ export default {
           return 0
         }
       })
+    },
+    async sendFavorite (item) {
+      // TODO: ファボ送信
+      try {
+        const result = await this.$axios.$post('/api/favorites', {
+          post: item,
+          type: 'Smile'
+        }, {
+          headers: {
+            Authorization: localStorage.getItem('auth._token.local')
+          }
+        })
+        alert(result)
+      } catch (e) {
+        alert(e)
+      }
+    },
+    async getFavorites () {
+      const favorites = await this.$axios.get(`/api/favorites/`)
+      this.favorites = favorites.data
+    },
+    countFavoriteNum (postId) {
+      const users = []
+      for (const fav of this.favorites) {
+        if (fav.post_id === postId) {
+          users.push(fav.user_id)
+        }
+      }
+      const setUsers = new Set(users)
+      return [...setUsers].length
+    },
+    isPushFavorite (postId) {
+
     }
   }
 }
