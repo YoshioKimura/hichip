@@ -3,7 +3,8 @@
     <v-layout justify-start>
       <template v-for="(u, i) in users">
         <UserListItem
-          :user="{...u, img: `https://i.pravatar.cc/150?id=${Math.ceil(Math.random()*5)}`}"
+          v-if="u.id!==$auth.user.id"
+          :user="{...u, img: `https://i.pravatar.cc/150?id=${u.id}`}"
           :key="i"
           @openDialog="openDialog"
         />

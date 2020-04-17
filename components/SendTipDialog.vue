@@ -6,25 +6,47 @@
   >
     <v-card v-if="!check">
       <v-card-title>
-        <v-avatar size="40">
+        <v-avatar size="40" class="mr-2">
           <v-img :src="user.img" />
         </v-avatar>
         <div class="name">
           {{ user.name }}
         </div>
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="black--text">
         <div>
           おくれるポイント数: {{ available }}
         </div>
-        <v-text-field
-          v-model="point"
-          label="おくるポイント数(半角数字)"
-          type="number"
-        />
+        <div class="pt-12">
+          <v-row align="center">
+            <v-col cols="9">
+              <v-slider
+                v-model="point"
+                :max="available"
+                thumb-label="always"
+                hide-details
+              />
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="point"
+                type="number"
+                outlined
+                hide-details
+              />
+            </v-col>
+          </v-row>
+        </div>
+
+        <div class="mb-4 text-center">
+          {{ user.name }} さんに<span class="font-weight-bold title">{{ point }}</span>ポイントをおくります
+        </div>
+
         <v-textarea
           v-model="comment"
           label="コメント"
+          hide-details
+          outlined
         />
       </v-card-text>
       <v-card-actions>
