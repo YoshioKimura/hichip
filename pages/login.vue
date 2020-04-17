@@ -48,9 +48,10 @@ export default {
             password: args.pw
           }
         })
+        this.$store.dispatch('snackbar/setSnackbar', { text: `ログインしました` })
         this.$router.push('/')
       } catch (e) {
-        alert('[Error]' + e)
+        this.$store.dispatch('snackbar/setSnackbar', { color: 'error', text: e })
       }
     }
   }

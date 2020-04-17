@@ -43,8 +43,12 @@ export default {
   //   })
   //   return { users }
   // },
-  mounted () {
-    this.getColleagues()
+  async mounted () {
+    this.users = await this.$axios.$post('/api/users/colleague', {}, {
+      headers: {
+        Authorization: localStorage.getItem('auth._token.local')
+      }
+    })
   },
   methods: {
     openDialog (user) {
@@ -66,13 +70,6 @@ export default {
       })
       await this.$router.push('/')
     }
-  },
-  async getColleagues () {
-    this.users = await this.$axios.$post('/api/users/colleague', {}, {
-      headers: {
-        Authorization: localStorage.getItem('auth._token.local')
-      }
-    })
   }
 }
 </script>

@@ -11,6 +11,7 @@ export default {
   methods: {
     async signOut () {
       await this.$auth.logout()
+      this.$store.dispatch('snackbar/setSnackbar', { text: `ログアウトしました` })
       this.$router.push('/login')
     }
   }
