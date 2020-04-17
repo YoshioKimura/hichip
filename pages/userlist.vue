@@ -31,16 +31,20 @@ export default {
   data () {
     return {
       dialog: false,
-      user: {}
+      user: {},
+      users: []
     }
   },
-  async asyncData ({ $axios, $auth }) {
-    const users = await $axios.$post('/api/users/colleague', {}, {
-      headers: {
-        Authorization: localStorage.getItem('auth._token.local')
-      }
-    })
-    return { users }
+  // async asyncData ({ $axios, $auth }) {
+  //   const users = await $axios.$post('/api/users/colleague', {}, {
+  //     headers: {
+  //       Authorization: localStorage.getItem('auth._token.local')
+  //     }
+  //   })
+  //   return { users }
+  // },
+  mounted () {
+    this.getColleagues()
   },
   methods: {
     openDialog (user) {
@@ -62,6 +66,13 @@ export default {
       })
       await this.$router.push('/')
     }
+  },
+  async getColleagues () {
+    this.users = await this.$axios.$post('/api/users/colleague', {}, {
+      headers: {
+        Authorization: localStorage.getItem('auth._token.local')
+      }
+    })
   }
 }
 </script>
