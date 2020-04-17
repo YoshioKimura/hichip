@@ -1,5 +1,4 @@
 import colors from 'vuetify/es5/util/colors'
-const env = require(`./env.js`)
 
 export default {
   mode: 'universal',
@@ -64,7 +63,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: env.apiTarget // TODO: Laravelサーバに置換
+      target: 'https://hi-chip.herokuapp.com' // TODO: Laravelサーバに置換
     }
   },
   /**
