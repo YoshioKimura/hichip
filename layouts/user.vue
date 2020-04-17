@@ -85,7 +85,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          :to="`/${user.uid}`"
+          :to="`/${$auth.loggedIn ? $auth.user.id: 0 }`"
           nuxt
         >
           <v-list-item-content>
@@ -122,14 +122,6 @@ export default {
         { title: 'チップをおくる', to: '/userlist' },
         { title: 'ログアウトする', to: '/logout' }
       ]
-    }
-  },
-  computed: {
-    user () {
-      const user = {
-        uid: 2
-      }
-      return user
     }
   },
   mounted () {
