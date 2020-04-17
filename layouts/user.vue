@@ -110,6 +110,7 @@
 
 <script>
 export default {
+  // middleware: 'auth',
   data () {
     return {
       amount: 0,
