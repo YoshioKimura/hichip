@@ -64,7 +64,7 @@ export default {
   proxy: {
     '/api/': {
       // target: 'https://hi-chip.herokuapp.com' // TODO: Laravelサーバに置換
-      target: 'https://5e506bcd.ngrok.io'
+      target: 'https://d271c1a2.ngrok.io'
     }
   },
   /**

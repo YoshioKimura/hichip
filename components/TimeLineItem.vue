@@ -62,15 +62,17 @@
             </span>
             ポイント{{ label==="もらった"? 'が贈られました！': 'を贈りました！' }}
           </div>
-          <div>
-            {{ item.comment }}
+          <div class="balloon1-top">
+            <p>
+              {{ item.content }}
+            </p>
           </div>
           <div>
             {{ $moment(item.created_at).format('YYYY年MM月DD日 HH:MM') }}
           </div>
         </div>
       </div>
-      <div>
+      <div v-if="label==='すべて'">
         <v-btn @click="sendFavorite" icon large>
           <v-icon>
             mdi-heart
@@ -106,3 +108,32 @@ export default {
 
 }
 </script>
+<style scoped>
+  .balloon1-top {
+    position: relative;
+    display: inline-block;
+    margin: 0.3em 0;
+    padding: 7px 10px;
+    min-width: 120px;
+    max-width: 100%;
+    color: #555;
+    font-size: 16px;
+    background: #eee;
+    border-radius: 4px;
+  }
+
+  .balloon1-top:before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 30px;
+    margin-left: -15px;
+    border: 10px solid transparent;
+    border-bottom: 10px solid #eee;
+  }
+
+  .balloon1-top p {
+    margin: 0;
+    padding: 0;
+  }
+</style>

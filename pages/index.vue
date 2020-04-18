@@ -56,6 +56,7 @@ export default {
     posts () {
       this.histories = this.posts
       this.histories = this.histories.map((el) => { el.label = 'すべて'; return el })
+      this.histories = this.sortTime(this.histories)
     }
   },
   created () {
