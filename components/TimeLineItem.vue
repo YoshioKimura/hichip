@@ -13,13 +13,19 @@
             <v-chip :color="label==='もらった'?'cyan':'light-green'" small class="mr-2" c>
               {{ label }}
             </v-chip>
-            <nuxt-link
-              :to="`/${item.sender_id}`"
-              class="font-weight-black"
-            >
-              {{ label==="もらった"?item.sender_name: item.receiver_name }}
-            </nuxt-link>
-            さん{{ label==="もらった"? 'から': 'へ' }}
+            <span v-if="item.sender_id===0">
+              運営より
+            </span>
+            <span v-else>
+              <nuxt-link
+                :to="`/${item.sender_id}`"
+                class="font-weight-black"
+              >
+                {{ label==="もらった"?item.sender_name: item.receiver_name }}
+              </nuxt-link>
+              さん{{ label==="もらった"? 'から': 'へ' }}
+            </span>
+
             <span class="font-weight-bold title">
               {{ item.amount }}
             </span>
