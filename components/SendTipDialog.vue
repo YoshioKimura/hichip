@@ -22,7 +22,7 @@
             <v-col cols="9">
               <v-slider
                 v-model="point"
-                :max="available"
+                :max="sendablePoint"
                 thumb-label="always"
                 hide-details
               />
@@ -98,9 +98,15 @@ export default {
   data () {
     return {
       comment: '',
-      point: '',
+      point: 39,
       check: false,
-      available: 0
+      available: 0,
+      maxPoint: 500
+    }
+  },
+  computed: {
+    sendablePoint () {
+      return this.available < this.maxPoint ? this.available : this.maxPoint
     }
   },
   mounted () {

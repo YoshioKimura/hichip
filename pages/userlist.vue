@@ -1,15 +1,21 @@
 <template>
   <v-container>
-    <v-layout justify-start>
+    <v-row>
       <template v-for="(u, i) in users">
-        <UserListItem
+        <v-col
           v-if="u.id!==$auth.user.id"
-          :user="{...u, img: `https://i.pravatar.cc/150?id=${u.id}`}"
-          :key="i"
-          @openDialog="openDialog"
-        />
+          cols="6"
+          sm="3"
+          md="2"
+        >
+          <UserListItem
+            :user="{...u, img: `https://i.pravatar.cc/150?id=${u.id}`}"
+            :key="i"
+            @openDialog="openDialog"
+          />
+        </v-col>
       </template>
-    </v-layout>
+    </v-row>
     <SendTipDialog
       :dialog="dialog"
       :user="user"
@@ -86,6 +92,7 @@ export default {
       console.log(chip)
       console.log('send')
       console.log(send)
+      this.$store.dispatch('snackbar/setSnackbar', { text: `ポイントを贈りました！` })
       await this.$router.push('/')
     }
   }
