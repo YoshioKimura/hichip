@@ -9,13 +9,14 @@
         {{ tab.label }}
       </v-tab>
     </v-tabs>
+    {{ posts }}
     <v-row justify="center">
       <v-col cols="12" sm="11" md="10">
-        <template v-for="(post, i) in posts">
+        <template v-for="(history, i) in histories">
           <TimeLineItem
-            :label="post.label"
-            :favorite-num="countFavoriteNum(post.id)"
-            :item="{...post, sender_name: getUserName(post.sender_id), receiver_name: getUserName(post.receiver_id)}"
+            :label="history.label"
+            :favorite-num="countFavoriteNum(history.id)"
+            :item="{...history, sender_name: getUserName(history.sender_id), receiver_name: getUserName(history.receiver_id)}"
             :key="i"
             @favorite="sendFavorite"
           />
@@ -28,6 +29,7 @@
 
 <script>
 import TimeLineItem from '@/components/TimeLineItem'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   layout: 'user',
@@ -36,33 +38,40 @@ export default {
   },
   data () {
     return {
-      posts: [],
+      histories: [],
       colleagues: [],
       favorites: [],
       currentLabel: 'すべて',
       tabs: [
-        { label: 'すべて', type: '/api/chips/receipt' },
+        { label: 'すべて', type: '/api/chips/posts' },
         { label: 'もらった', type: '/api/chips/receipt' },
         { label: 'おくった', type: '/api/chips/sent' },
         { label: 'いいねした', type: '/api/favorites/sent' }
       ]
     }
   },
+  computed: {
+    ...mapState('posts', ['posts'])
+  },
   mounted () {
     this.getFavorites()
+    this.$store.dispatch('posts/getPosts')
     this.getColleagues()
-    this.getAllPosts()
+    this.getAllHistories()
   },
   methods: {
+    ...mapActions('posts', [
+      'getPosts'
+    ]),
     click (tab) {
       this.currentLabel = tab.label
       if (tab.label === 'すべて') {
-        this.getAllPosts()
+        this.getAllHistories()
       } else {
-        this.getPosts(tab)
+        this.getHistories(tab)
       }
     },
-    async getAllPosts () {
+    async getAllHistories () {
       // 本当はサーバー側に書けるといい処理
       const receipt = await this.$axios.$post('/api/chips/receipt', {}, {
         headers: {
@@ -74,14 +83,13 @@ export default {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
-      console.log(receipt, sent)
       const posts = [
         ...receipt.map((el) => { el.label = 'もらった'; return el }),
         ...sent.map((el) => { el.label = 'おくった'; return el })
       ]
-      this.posts = this.sortTime(posts)
+      this.histories = this.sortTime(posts)
     },
-    async getPosts (tab) {
+    async getHistories (tab) {
       this.posts = await this.$axios.$post(tab.type, {}, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
@@ -103,7 +111,7 @@ export default {
           return colleague.name
         }
       }
-      return 'Undefined'
+      return '運営'
     },
     sortTime (items) {
       return items.sort((a, b) => {
