@@ -5,13 +5,13 @@
   >
     <v-card-text class="d-flex flex-row justify-space-between align-center">
       <div class="d-flex flex-row align-center">
-        <v-avatar size="40" class="mr-2">
+        <v-avatar v-if="label!=='いいねした'" size="40" class="mr-2">
           <v-img :src="`https://i.pravatar.cc/160?img=${item.sender_id}`" />
         </v-avatar>
-        <v-icon>
+        <v-icon v-if="label!=='いいねした'">
           mdi-arrow-right
         </v-icon>
-        <v-avatar size="40" class="ml-2 mr-4">
+        <v-avatar v-if="label!=='いいねした'" size="40" class="ml-2 mr-4">
           <v-img :src="`https://i.pravatar.cc/160?img=${item.receiver_id}`" />
         </v-avatar>
         <div>
@@ -44,6 +44,35 @@
               </span>
             </span>
           </div>
+          <div v-else-if="label==='いいねした'">
+            <span v-if="favoriteData.sender" class="ib">
+              <nuxt-link
+                :to="`/${favoriteData.sender_id}`"
+                class="font-weight-black"
+              >
+                {{ favoriteData.sender_id===0?'運営': favoriteData.sender.name }}
+              </nuxt-link>
+              さん から
+              <nuxt-link
+                :to="`/${favoriteData.receiver_id}`"
+                class="font-weight-black"
+              >
+                {{ favoriteData.receiver.name }}
+              </nuxt-link>
+              さん へ
+            </span>
+            <span class="ib">
+              <span v-if="favoriteData.chip">
+                <span class="font-weight-bold title">
+                  {{ favoriteData.chip.amount }}
+                </span>
+                ポイントが贈られました！
+              </span>
+              <span v-else>
+                メッセージが贈られました！
+              </span>
+            </span>
+          </div>
           <div v-else>
             <v-chip :color="label==='もらった'?'cyan':'light-green'" small class="mr-2" c>
               {{ label }}
@@ -66,7 +95,7 @@
             </span>
             ポイント{{ label==="もらった"? 'が贈られました！': 'を贈りました！' }}
           </div>
-          <div class="balloon1-top">
+          <div v-if="label!=='いいねした'" class="balloon1-top">
             <p>
               {{ item.content }}
             </p>
@@ -121,6 +150,10 @@ export default {
     favoriteUsers: {
       type: Array,
       default: () => { return [] }
+    },
+    posts: {
+      type: Array,
+      default: () => { return [] }
     }
   },
   data () {
@@ -131,6 +164,9 @@ export default {
   computed: {
     isAuthUserClicked () {
       return this.favoriteUsers.includes(this.$auth.user.id)
+    },
+    favoriteData () {
+      return this.pickPostData(this.item.post_id)
     }
   },
   methods: {
@@ -138,6 +174,15 @@ export default {
       this.color = 'red'
       this.favoriteNum += 1
       this.$emit('favorite', this.item.id)
+    },
+    pickPostData (id) {
+      for (const post of this.posts) {
+        if (post.id === id) {
+          console.log(post)
+          return { ...post }
+        }
+      }
+      return {}
     }
   }
 

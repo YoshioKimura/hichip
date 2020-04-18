@@ -17,6 +17,7 @@
             :favorite-users="countFavoriteUsers(history.id)"
             :item="{...history, sender_name: getUserName(history.sender_id), receiver_name: getUserName(history.receiver_id)}"
             :key="i"
+            :posts="posts"
             @favorite="sendFavorite"
           />
           <v-divider :key="i" />
