@@ -9,9 +9,8 @@
         {{ tab.label }}
       </v-tab>
     </v-tabs>
-    {{ posts }}
     <v-row justify="center">
-      <v-col cols="12" sm="11" md="10">
+      <v-col cols="12" md="11">
         <template v-for="(history, i) in histories">
           <TimeLineItem
             :label="history.label"
@@ -43,7 +42,7 @@ export default {
       favorites: [],
       currentLabel: 'すべて',
       tabs: [
-        { label: 'すべて', type: '/api/chips/posts' },
+        { label: 'すべて', type: '/api/posts' },
         { label: 'もらった', type: '/api/chips/receipt' },
         { label: 'おくった', type: '/api/chips/sent' },
         { label: 'いいねした', type: '/api/favorites/sent' }
@@ -53,11 +52,16 @@ export default {
   computed: {
     ...mapState('posts', ['posts'])
   },
-  mounted () {
+  watch: {
+    posts () {
+      this.histories = this.posts
+      this.histories = this.histories.map((el) => { el.label = 'すべて'; return el })
+    }
+  },
+  created () {
     this.getFavorites()
-    this.$store.dispatch('posts/getPosts')
+    this.getPosts()
     this.getColleagues()
-    this.getAllHistories()
   },
   methods: {
     ...mapActions('posts', [
@@ -65,8 +69,10 @@ export default {
     ]),
     click (tab) {
       this.currentLabel = tab.label
+      this.getHistories(tab)
       if (tab.label === 'すべて') {
-        this.getAllHistories()
+        this.histories = this.posts
+        // this.getAllHistories()
       } else {
         this.getHistories(tab)
       }
@@ -90,13 +96,13 @@ export default {
       this.histories = this.sortTime(posts)
     },
     async getHistories (tab) {
-      this.posts = await this.$axios.$post(tab.type, {}, {
+      this.histories = await this.$axios.$post(tab.type, {}, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
-      this.posts = this.posts.map((el) => { el.label = tab.label; return el })
-      this.posts = this.sortTime(this.posts)
+      this.histories = this.histories.map((el) => { el.label = tab.label; return el })
+      this.histories = this.sortTime(this.histories)
     },
     async getColleagues () {
       this.colleagues = await this.$axios.$post('/api/users/colleague', {}, {
