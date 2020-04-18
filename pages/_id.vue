@@ -9,7 +9,7 @@
         <v-img :src="`https://i.pravatar.cc/160?img=${$route.params.id}`" />
         <v-card-actions>
           <v-btn
-            v-if="$route.params.id == setUser.id"
+            v-if="false && $route.params.id == setUser.id"
             @click="changeAvatar()"
             block
             outlined

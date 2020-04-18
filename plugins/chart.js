@@ -5,7 +5,7 @@ const { reactiveProp } = mixins
 Vue.component('line-chart', {
   extends: Line,
   mixins: [reactiveProp],
-  props: ['options'],
+  props: ['data', 'options'],
   mounted () {
     this.renderChart(this.chartData, this.options)
   }

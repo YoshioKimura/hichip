@@ -85,7 +85,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="$auth.user && $auth.user.admin"
+          v-if="$auth.user && $auth.user.role >= 2"
           to="/master"
           nuxt
         >
@@ -122,16 +122,16 @@ export default {
   data () {
     const myid = this.$auth.loggedIn ? this.$auth.user.id : 0
     return {
-      amount: 0,
-      amountRange: 0,
-      available: 0,
+      amount: null,
+      amountRange: null,
+      available: null,
       links: [
         { title: 'タイムライン', to: '/' },
         { title: 'マイページ', to: `/${myid}` },
         { title: 'プロローグ', to: '/prologue' }
       ],
       menus: [
-        { title: 'チップをおくる', to: '/userlist' },
+        // { title: 'チップをおくる', to: '/userlist' },
         { title: 'ログアウトする', to: '/logout' }
       ]
     }

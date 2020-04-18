@@ -12,29 +12,65 @@
               {{ tab.label }}
             </v-tab>
           </v-tabs>
-          <line-chart :style="myStyles" :chart-data="datacollection" />
+          <line-chart
+            :style="myStyles"
+            :chart-data="datacollection"
+          />
         </v-card-text>
       </v-card>
     </v-col>
     <v-layout>
       <v-col
-        v-for="item in ranking"
-        :key="item"
         col="12"
-        sm="4"
+        sm="6"
       >
         <v-card>
           <div class="pa-2">
-            {{ item.label }}
+            今月おくったポイントが多い人
           </div>
           <v-card-text>
-            <div
-              v-for="(user, i) in getPosts(item.type)"
-              :key="i"
-            >
-              <span>{{ i + 1 }}</span>
-              <span>{{ user.name }}</span>
-            </div>
+            <template v-for="(data, j) in rkSent">
+              <div
+                :key="j"
+                class="d-flex"
+              >
+                <div>{{ j + 1 }}.</div>
+                <div class="pr-3 pl-1">
+                  {{ data.name }}
+                </div>
+                <div class="ml-auto">
+                  {{ data.total_amount }}pt
+                </div>
+              </div>
+              <v-divider :key="j" />
+            </template>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col
+        col="12"
+        sm="6"
+      >
+        <v-card>
+          <div class="pa-2">
+            今月もらったポイントが多い人
+          </div>
+          <v-card-text>
+            <template v-for="(data, j) in rkReceipt">
+              <div
+                :key="j"
+                class="d-flex"
+              >
+                <div>{{ j + 1 }}.</div>
+                <div class="pr-3 pl-1">
+                  {{ data.name }}
+                </div>
+                <div class="ml-auto">
+                  {{ data.total_amount }}pt
+                </div>
+              </div>
+              <v-divider :key="j" />
+            </template>
           </v-card-text>
         </v-card>
       </v-col>
@@ -51,28 +87,28 @@ export default {
         width: '300px',
         height: '300px'
       },
-      datacollection: {
-        labels: [],
-        datasets: [{
-          backgroundColor: 'rgba(255, 100, 130, 0.2)',
-          label: '累計',
-          data: []
-        }]
-      },
+      datacollection: {},
+      grafData: [],
+      grafLabel: [],
       tabs: [
         { label: '今年', type: 'year' },
         { label: '今月', type: 'mouth' },
         { label: '今週', type: 'week' }
       ],
-      ranking: [
-        { label: '今月おくったポイントが多い人', type: '/api/chips/high_sent_employee' },
-        { label: '今月もらったポイントが多い人', type: '/api/chips/high_receipt_employee' },
-        { label: '今月拍手した回数が一番多い人', type: '' }
-      ]
+      rkSent: [],
+      rkReceipt: []
     }
   },
-  mounted () {
+  async mounted () {
     this.getTransition('year')
+    const dataSent = await this.getPosts('/api/chips/high_sent_employee')
+    this.rkSent = dataSent.map((v) => {
+      return Object.assign({ ...v.user }, { ...v.chip })
+    })
+    const dataReceipt = await this.getPosts('/api/chips/high_receipt_employee')
+    this.rkReceipt = dataReceipt.map((v) => {
+      return Object.assign({ ...v.user }, { ...v.chip })
+    })
   },
   methods: {
     click (type) {
@@ -86,19 +122,31 @@ export default {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
-      console.log(GrafData)
-      this.datacollection.labels = GrafData.labels
-      this.datacollection.datasets[0].data = GrafData.data
+
+      this.grafLabel = GrafData.labels
+
+      this.grafData = GrafData.data.map((v) => {
+        return v.total_amount
+      })
+
+      this.datacollection = {
+        labels: this.grafLabel,
+        datasets: [
+          {
+            label: '累計',
+            backgroundColor: '#7de5d7',
+            data: this.grafData
+          }
+        ]
+      }
     },
-    getRandomInt () {
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-    },
-    getPosts (type) {
-      return this.$axios.$post(type, {}, {
+    async getPosts (type) {
+      const data = await this.$axios.$post(type, {}, {
         headers: {
           Authorization: localStorage.getItem('auth._token.local')
         }
       })
+      return data
     }
   }
 }
