@@ -105,7 +105,6 @@
       :color="snackbar.color"
       :style="`bottom: ${(index * 60) + 8}px`"
       @input="$store.commit('snackbar/changeShowingStatus', {id: snackbar.id, value: false})"
-      top
     >
       {{ snackbar.text }}
       <v-btn @click="$store.commit('snackbar/changeShowingStatus', {id: snackbar.id, value: false})" text>
