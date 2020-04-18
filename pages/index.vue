@@ -14,7 +14,7 @@
         <template v-for="(history, i) in histories">
           <TimeLineItem
             :label="history.label"
-            :favorite-num="countFavoriteNum(history.id)"
+            :favorite-users="countFavoriteUsers(history.id)"
             :item="{...history, sender_name: getUserName(history.sender_id), receiver_name: getUserName(history.receiver_id)}"
             :key="i"
             @favorite="sendFavorite"
@@ -132,17 +132,17 @@ export default {
       })
     },
     async sendFavorite (id) {
-      // TODO: postにpostidを代入する
       try {
-        const result = await this.$axios.$post('/api/favorites', {
-          post: 46,
-          type: 'Smile'
+        this.$store.dispatch('snackbar/setSnackbar', { text: `いいねしました！` })
+        await this.$axios.$post('/api/favorites', {
+          post: { id },
+          type: 16
         }, {
           headers: {
             Authorization: localStorage.getItem('auth._token.local')
           }
         })
-        alert(result)
+        this.getFavorites()
       } catch (e) {
         alert(e)
       }
@@ -151,15 +151,19 @@ export default {
       const favorites = await this.$axios.get(`/api/favorites/`)
       this.favorites = favorites.data
     },
-    countFavoriteNum (postId) {
+    countFavoriteUsers (postId) {
+      console.log(postId)
+      console.log('postId')
+      console.log(this.favorites)
       const users = []
       for (const fav of this.favorites) {
+        console.log(fav.post_id, postId)
         if (fav.post_id === postId) {
           users.push(fav.user_id)
         }
       }
       const setUsers = new Set(users)
-      return [...setUsers].length
+      return [...setUsers]
     }
   }
 }

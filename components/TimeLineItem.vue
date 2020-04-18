@@ -16,28 +16,32 @@
         </v-avatar>
         <div>
           <div v-if="label==='すべて'">
-            <nuxt-link
-              :to="`/${item.sender_id}`"
-              class="font-weight-black"
-            >
-              {{ item.sender_id===0?'運営': item.sender_name }}
-            </nuxt-link>
-            さん から
-            <nuxt-link
-              :to="`/${item.receiver_id}`"
-              class="font-weight-black"
-            >
-              {{ item.receiver_name }}
-            </nuxt-link>
-            さん へ
-            <span v-if="item.chip">
-              <span class="font-weight-bold title">
-                {{ item.chip.amount }}
-              </span>
-              ポイントが贈られました！
+            <span class="ib">
+              <nuxt-link
+                :to="`/${item.sender_id}`"
+                class="font-weight-black"
+              >
+                {{ item.sender_id===0?'運営': item.sender_name }}
+              </nuxt-link>
+              さん から
+              <nuxt-link
+                :to="`/${item.receiver_id}`"
+                class="font-weight-black"
+              >
+                {{ item.receiver_name }}
+              </nuxt-link>
+              さん へ
             </span>
-            <span v-else>
-              メッセージが贈られました！
+            <span class="ib">
+              <span v-if="item.chip">
+                <span class="font-weight-bold title">
+                  {{ item.chip.amount }}
+                </span>
+                ポイントが贈られました！
+              </span>
+              <span v-else>
+                メッセージが贈られました！
+              </span>
             </span>
           </div>
           <div v-else>
@@ -72,13 +76,32 @@
           </div>
         </div>
       </div>
-      <div v-if="label==='すべて'">
-        <v-btn @click="sendFavorite" icon large>
+      <div v-if="label==='すべて' && item.sender_id!==$auth.user.id">
+        <v-btn
+          v-if="isAuthUserClicked"
+          @click=""
+          color="red"
+          icon
+          large
+        >
           <v-icon>
             mdi-heart
           </v-icon>
         </v-btn>
-        {{ favoriteNum }}
+        <v-btn
+          v-else
+          @click="sendFavorite"
+          :color="color"
+          icon
+          large
+        >
+          <v-icon>
+            mdi-heart
+          </v-icon>
+        </v-btn>
+        <span>
+          {{ this.favoriteUsers.length }}
+        </span>
       </div>
     </v-card-text>
   </v-card>
@@ -95,14 +118,26 @@ export default {
       type: String,
       default: ''
     },
-    favoriteNum: {
-      type: Number,
-      default: 0
+    favoriteUsers: {
+      type: Array,
+      default: () => { return [] }
+    }
+  },
+  data () {
+    return {
+      color: ''
+    }
+  },
+  computed: {
+    isAuthUserClicked () {
+      return this.favoriteUsers.includes(this.$auth.user.id)
     }
   },
   methods: {
     sendFavorite () {
-      this.$emit('favorite', this.item)
+      this.color = 'red'
+      this.favoriteNum += 1
+      this.$emit('favorite', this.item.id)
     }
   }
 
@@ -135,5 +170,9 @@ export default {
   .balloon1-top p {
     margin: 0;
     padding: 0;
+  }
+
+  .ib {
+    style:inline-block;
   }
 </style>
